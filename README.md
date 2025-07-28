@@ -10,6 +10,8 @@ Swagger Integration: Interactive API documentation and testing interface
 Docker Support: Easy containerized deployment
 Unit Testing: Comprehensive test coverage with mocking
 
+<img width="1378" height="863" alt="image" src="https://github.com/user-attachments/assets/0a617b31-f293-4838-9290-22a429e2ba1e" />
+
 Key Components
 
 Exchange: Represents a cryptocurrency exchange with balance constraints and order book data
