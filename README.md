@@ -71,3 +71,106 @@ Take 0.5 BTC from Exchange A @ €2,964.29 = €1,482.15
 Take 0.8 BTC from Exchange B @ €2,965.00 = €2,372.00
 Take 0.7 BTC from Exchange A @ €2,966.40 = €2,076.48
 Total: 2.0 BTC for €5,930.63 (average: €2,965.32/BTC)
+
+Test Input JSON:
+{
+  "orderType": "Buy",
+  "amount": 0.5,
+  "exchanges": [
+    {
+      "exchangeId": "Binance",
+      "balance": {
+        "eur": 10000.0,
+        "btc": 5.0
+      },
+      "orderBook": {
+        "acqTime": "2019-01-29T11:00:00.2518854Z",
+        "bids": [],
+        "asks": [
+          {
+            "order": {
+              "id": "ask_1",
+              "time": "2019-01-29T10:55:00Z",
+              "type": "Sell",
+              "kind": "Limit",
+              "amount": 0.3,
+              "price": 2960.00
+            }
+          },
+          {
+            "order": {
+              "id": "ask_2", 
+              "time": "2019-01-29T10:56:00Z",
+              "type": "Sell",
+              "kind": "Limit",
+              "amount": 0.4,
+              "price": 2965.00
+            }
+          }
+        ]
+      }
+    },
+    {
+      "exchangeId": "Coinbase",
+      "balance": {
+        "eur": 8000.0,
+        "btc": 3.0
+      },
+      "orderBook": {
+        "acqTime": "2019-01-29T11:00:00.1234567Z",
+        "bids": [],
+        "asks": [
+          {
+            "order": {
+              "id": "ask_3",
+              "time": "2019-01-29T10:54:00Z", 
+              "type": "Sell",
+              "kind": "Limit",
+              "amount": 0.2,
+              "price": 2958.00
+            }
+          },
+          {
+            "order": {
+              "id": "ask_4",
+              "time": "2019-01-29T10:57:00Z",
+              "type": "Sell", 
+              "kind": "Limit",
+              "amount": 0.5,
+              "price": 2962.00
+            }
+          }
+        ]
+      }
+    }
+  ]
+}
+
+Expected Output JSON:
+{
+  "success": true,
+  "data": {
+    "orders": [
+      {
+        "exchangeId": "Coinbase",
+        "type": "Buy",
+        "amount": 0.2,
+        "price": 2958.0,
+        "cost": 591.6
+      },
+      {
+        "exchangeId": "Binance", 
+        "type": "Buy",
+        "amount": 0.3,
+        "price": 2960.0,
+        "cost": 888.0
+      }
+    ],
+    "totalAmount": 0.5,
+    "totalCost": 1479.6,
+    "averagePrice": 2959.2,
+    "isFullyExecuted": true,
+    "message": "Fully executed."
+  },
+  "message": "Best execution plan calculated successfully"
+}
