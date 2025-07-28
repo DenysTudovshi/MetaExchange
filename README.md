@@ -73,6 +73,7 @@ Take 0.7 BTC from Exchange A @ €2,966.40 = €2,076.48
 Total: 2.0 BTC for €5,930.63 (average: €2,965.32/BTC)
 
 Test Input JSON:
+
 {
   "orderType": "Buy",
   "amount": 0.5,
@@ -147,6 +148,7 @@ Test Input JSON:
 }
 
 Expected Output JSON:
+
 {
   "success": true,
   "data": {
