@@ -72,7 +72,7 @@ Take 0.8 BTC from Exchange B @ €2,965.00 = €2,372.00
 Take 0.7 BTC from Exchange A @ €2,966.40 = €2,076.48
 Total: 2.0 BTC for €5,930.63 (average: €2,965.32/BTC)
 
-Test Input JSON:
+Test Input JSON (Buy Operation):
 
 {
   "orderType": "Buy",
@@ -176,3 +176,117 @@ Expected Output JSON:
   },
   "message": "Best execution plan calculated successfully"
 }
+
+Test Input JSON (Sell Operation):
+
+{
+  "orderType": "Sell",
+  "amount": 1.0,
+  "exchanges": [
+    {
+      "exchangeId": "Exchange-A",
+      "balance": {
+        "eur": 8000.0,
+        "btc": 5.0
+      },
+      "orderBook": {
+        "acqTime": "2019-01-29T11:00:00.2518854Z",
+        "bids": [
+          {
+            "order": {
+              "id": "bid_1",
+              "time": "2019-01-29T10:55:00Z",
+              "type": "Buy",
+              "kind": "Limit",
+              "amount": 0.4,
+              "price": 2950.00
+            }
+          },
+          {
+            "order": {
+              "id": "bid_2",
+              "time": "2019-01-29T10:56:00Z",
+              "type": "Buy",
+              "kind": "Limit",
+              "amount": 0.3,
+              "price": 2945.00
+            }
+          }
+        ],
+        "asks": []
+      }
+    },
+    {
+      "exchangeId": "Exchange-B",
+      "balance": {
+        "eur": 12000.0,
+        "btc": 3.0
+      },
+      "orderBook": {
+        "acqTime": "2019-01-29T11:00:00.1234567Z",
+        "bids": [
+          {
+            "order": {
+              "id": "bid_3",
+              "time": "2019-01-29T10:54:00Z",
+              "type": "Buy",
+              "kind": "Limit",
+              "amount": 0.6,
+              "price": 2955.00
+            }
+          },
+          {
+            "order": {
+              "id": "bid_4",
+              "time": "2019-01-29T10:57:00Z",
+              "type": "Buy",
+              "kind": "Limit",
+              "amount": 0.2,
+              "price": 2952.00
+            }
+          }
+        ],
+        "asks": []
+      }
+    }
+  ]
+}
+
+Expected Output JSON (Sell Operation):
+
+{
+  "success": true,
+  "data": {
+    "orders": [
+      {
+        "exchangeId": "Exchange-B",
+        "type": "Sell",
+        "amount": 0.6,
+        "price": 2955.00,
+        "cost": 1773.00
+      },
+      {
+        "exchangeId": "Exchange-B", 
+        "type": "Sell",
+        "amount": 0.2,
+        "price": 2952.00,
+        "cost": 590.40
+      },
+      {
+        "exchangeId": "Exchange-A",
+        "type": "Sell",
+        "amount": 0.2,
+        "price": 2950.00,
+        "cost": 590.00
+      }
+    ],
+    "totalAmount": 1.0,
+    "totalCost": 2953.40,
+    "averagePrice": 2953.40,
+    "isFullyExecuted": true,
+    "message": "Fully executed."
+  },
+  "message": "Best execution plan calculated successfully"
+}
+
+
