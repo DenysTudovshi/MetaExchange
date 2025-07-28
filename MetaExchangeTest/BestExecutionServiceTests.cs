@@ -2,7 +2,6 @@ using Xunit;
 using MetaExchange.Services;
 using MetaExchange.Models;
 using Moq;
-using CML_BSD_Assigment.Models;
 
 namespace MetaExchange.Tests;
 public class BestExecutionServiceTests

@@ -1,7 +1,9 @@
 ﻿using MetaExchange.Models;
+
 namespace MetaExchange.Services;
 public class OrderBookService : IOrderBookService
 {
+    /// <inheritdoc />
     public List<OrderBookEntry> GetAvailableAsks(OrderBook orderBook, decimal maxAmount)
     {
         var availableAsks = new List<OrderBookEntry>();
@@ -33,6 +35,7 @@ public class OrderBookService : IOrderBookService
         return availableAsks;
     }
 
+    /// <inheritdoc />
     public List<OrderBookEntry> GetAvailableBids(OrderBook orderBook, decimal maxAmount)
     {
         var availableBids = new List<OrderBookEntry>();

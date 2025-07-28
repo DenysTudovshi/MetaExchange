@@ -1,6 +1,9 @@
 using MetaExchange.Services;
+using MetaExchange.Validators;
 using Microsoft.OpenApi.Models;
 using System.Text.Json.Serialization;
+using FluentValidation;
+using Microsoft.AspNetCore.Mvc;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,6 +14,13 @@ builder.Services.AddControllers()
         options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
         options.JsonSerializerOptions.PropertyNamingPolicy = null;
     });
+
+builder.Services.AddValidatorsFromAssemblyContaining<ExecutionRequestValidator>();
+
+builder.Services.Configure<ApiBehaviorOptions>(options =>
+{
+    options.SuppressModelStateInvalidFilter = true;
+});
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>

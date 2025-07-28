@@ -18,7 +18,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\CML BSD Assigment\MetaExchange.csproj" />
+    <ProjectReference Include="..\MetaExchange\MetaExchange.csproj" />
   </ItemGroup>
 
   <ItemGroup>

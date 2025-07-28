@@ -10,6 +10,7 @@ public class BestExecutionService : IBestExecutionService
         _orderBookService = orderBookService;
     }
 
+    /// <inheritdoc />
     public ExecutionPlan FindBestExecution(ExecutionRequest request)
     {
         if (request.OrderType == OrderType.Buy)
@@ -22,6 +23,24 @@ public class BestExecutionService : IBestExecutionService
         }
     }
 
+    /// <summary>
+    /// Finds the optimal execution plan for buying Bitcoin by aggregating the lowest-priced sell orders
+    /// across all provided exchanges. Implements a straightforward sorting-based approach for simplicity
+    /// and code readability, though more efficient algorithms could be applied for high-frequency scenarios.
+    /// 
+    /// Algorithm: Collects all available asks from exchanges, sorts by price ascending, then fills
+    /// the requested amount starting with the cheapest orders. This O(n log n) approach was chosen
+    /// over more efficient alternatives like a min-heap/priority queue (O(n log k)) or merge algorithm
+    /// for pre-sorted order books (O(n)) to maintain clear, maintainable code flow.
+    /// 
+    /// The method applies exchange balance constraints to ensure orders don't exceed available BTC
+    /// on each exchange, and tracks remaining balances to prevent over-allocation during execution planning.
+    /// </summary>
+    /// <param name="request">The buy execution request containing amount and exchange data</param>
+    /// <returns>
+    /// An execution plan with orders sorted by ascending price (cheapest first),
+    /// minimizing the total cost for the requested Bitcoin purchase amount
+    /// </returns>
     private ExecutionPlan FindBestBuyExecution(ExecutionRequest request)
     {
         var executionPlan = new ExecutionPlan();
@@ -74,6 +93,7 @@ public class BestExecutionService : IBestExecutionService
             balance.BTC -= amountToTake;
         }
 
+        //Form clear report response with result description in case plan was only partially executed.
         executionPlan.TotalAmount = request.Amount - remainingAmount;
         executionPlan.TotalCost = totalCost;
         executionPlan.AveragePrice = executionPlan.TotalAmount > 0 ? totalCost / executionPlan.TotalAmount : 0;
@@ -85,6 +105,24 @@ public class BestExecutionService : IBestExecutionService
         return executionPlan;
     }
 
+    /// <summary>
+    /// Finds the optimal execution plan for selling Bitcoin by aggregating the highest-priced buy orders
+    /// across all provided exchanges. Implements a straightforward sorting-based approach for simplicity
+    /// and code readability, though more efficient algorithms could be applied for high-frequency scenarios.
+    /// 
+    /// Algorithm: Collects all available bids from exchanges, sorts by price descending, then fills
+    /// the requested amount starting with the highest-paying orders. This O(n log n) approach was chosen
+    /// over more efficient alternatives like a max-heap/priority queue (O(n log k)) or merge algorithm
+    /// for pre-sorted order books (O(n)) to maintain clear, maintainable code flow.
+    /// 
+    /// The method applies exchange balance constraints to ensure orders don't exceed available EUR
+    /// on each exchange, and tracks remaining balances to prevent over-allocation during execution planning.
+    /// </summary>
+    /// <param name="request">The sell execution request containing amount and exchange data</param>
+    /// <returns>
+    /// An execution plan with orders sorted by descending price (highest paying first),
+    /// maximizing the total revenue for the requested Bitcoin sale amount
+    /// </returns>
     private ExecutionPlan FindBestSellExecution(ExecutionRequest request)
     {
         var executionPlan = new ExecutionPlan();
@@ -137,6 +175,7 @@ public class BestExecutionService : IBestExecutionService
             balance.EUR -= revenue;
         }
 
+        //Form clear report response with result description in case plan was only partially executed.
         executionPlan.TotalAmount = request.Amount - remainingAmount;
         executionPlan.TotalCost = totalRevenue;
         executionPlan.AveragePrice = executionPlan.TotalAmount > 0 ? totalRevenue / executionPlan.TotalAmount : 0;
